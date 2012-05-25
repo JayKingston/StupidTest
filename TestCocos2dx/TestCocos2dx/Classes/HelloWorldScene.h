@@ -20,6 +20,8 @@ public:
     // a selector callback
     virtual void menuCloseCallback(CCObject* pSender);
 
+	// a selector callback
+	virtual void menuNumCallback(CCObject* pSender);
 
 	// default implements are used to call script callback if exist
 	virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);

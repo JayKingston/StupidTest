@@ -60,10 +60,33 @@ bool HelloWorld::init()
         // Add the menu to HelloWorld layer as a child layer.
         this->addChild(pMenu, 1);
 
+
+		// 创建1-9数字
+		CCMenuItemImage *pNumItem = 0;
+		std::vector<CCMenuItemImage*> vecMenuItem;
+		CCMenu* pNumMenu = 0;
+		for (int idx = 0; idx < 9; ++idx) {
+			pNumItem = CCMenuItemImage::itemFromNormalImage(
+				"Resources/ForNum_Normal.png",
+				"Resources/ForNum_Select.png",
+				this,
+				menu_selector(HelloWorld::menuNumCallback));
+			CC_BREAK_IF(!pNumItem);
+			pNumItem->setTag(idx + 1);
+			pNumItem->setPosition(ccp(280 + idx * 48, 60));
+			vecMenuItem.push_back(pNumItem);
+		}
+		pNumMenu = CCMenu::menuWithItems(vecMenuItem[0], vecMenuItem[1], vecMenuItem[2], vecMenuItem[3],
+										 vecMenuItem[4], vecMenuItem[5], vecMenuItem[6], vecMenuItem[7],
+										 vecMenuItem[8], NULL);
+		CC_BREAK_IF(!pNumMenu);
+		pNumMenu->setPosition(CCPointZero);
+		this->addChild(pNumMenu, 1);
+
         // 2. Add a label shows "Hello World".
 
         // Create a label and initialize with string "Hello World".
-        CCLabelTTF* pLabel = CCLabelTTF::labelWithString("Hello World", "Thonburi", 64);
+        CCLabelTTF* pLabel = CCLabelTTF::labelWithString("Hello Soduko", "Thonburi", 64);
         CC_BREAK_IF(! pLabel);
 
         // Get window size and place the label upper. 
@@ -74,7 +97,7 @@ bool HelloWorld::init()
         this->addChild(pLabel, 1);
 
         // 3. Add add a splash screen, show the cocos2d splash image.
-        CCSprite* pSprite = CCSprite::spriteWithFile("Resources/HelloWorld.png");
+        CCSprite* pSprite = CCSprite::spriteWithFile("Resources/bk.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen
@@ -84,14 +107,9 @@ bool HelloWorld::init()
         this->addChild(pSprite, 0);
 
 
-		// 右下角添加一个显示当前鼠标位置的lable
-		m_pLabelMousePos = CCLabelTTF::labelWithString("", "Arial", 24);
-		CC_BREAK_IF(! m_pLabelMousePos);
-		CCSize sizeScr = CCDirector::sharedDirector()->getWinSize();
-		m_pLabelMousePos->setPosition(ccp(150, 12));
-		this->addChild(m_pLabelMousePos, 0);
-
+		// 设置可以touch
 		setIsTouchEnabled(true);
+		m_pLabelMousePos = 0;
 
         bRet = true;
     } while (0);
@@ -105,6 +123,67 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
     CCDirector::sharedDirector()->end();
 }
 
+void HelloWorld::menuNumCallback(CCObject* pSender)
+{
+	if (!pSender) {
+		return;
+	}
+
+	CCNode* pNode = (CCNode*)pSender;
+	if (!pNode) {
+		return;
+	}
+
+	switch (pNode->getTag()) {
+	case 1:
+		{
+			int a = 0;
+		}
+		break;
+	case 2:
+		{
+			int a = 0;
+		}
+		break;
+	case 3:
+		{
+			int a = 0;
+		}
+		break;
+	case 4:
+		{
+			int a = 0;
+		}
+		break;
+	case 5:
+		{
+			int a = 0;
+		}
+		break;
+	case 6:
+		{
+			int a = 0;
+		}
+		break;
+	case 7:
+		{
+			int a = 0;
+		}
+		break;
+	case 8:
+		{
+			int a = 0;
+		}
+		break;
+	case 9:
+		{
+			int a = 0;
+		}
+		break;
+	default:
+		break;
+	}
+}
 
 void HelloWorld::ShowMousePos(CCSet *pTouches)
 {
@@ -119,6 +198,16 @@ void HelloWorld::ShowMousePos(CCSet *pTouches)
 	if (m_pLabelMousePos)
 	{
 		m_pLabelMousePos->setString(m_strstrMousePos.str().c_str());
+	} else
+	{
+
+		// 左下角添加一个显示当前鼠标位置的lable
+		m_pLabelMousePos = CCLabelTTF::labelWithString(m_strstrMousePos.str().c_str(), "Arial", 24);
+		if (!m_pLabelMousePos) {
+			return;
+		}
+		m_pLabelMousePos->setPosition(ccp(150, 12));
+		this->addChild(m_pLabelMousePos, 0);
 	}
 }
 
