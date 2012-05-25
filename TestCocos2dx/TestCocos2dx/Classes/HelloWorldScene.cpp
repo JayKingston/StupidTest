@@ -65,6 +65,8 @@ bool HelloWorld::init()
 		CCMenuItemImage *pNumItem = 0;
 		std::vector<CCMenuItemImage*> vecMenuItem;
 		CCMenu* pNumMenu = 0;
+		CCLabelTTF* pNumLabel = 0;
+		char szText[8] = { 0 };
 		for (int idx = 0; idx < 9; ++idx) {
 			pNumItem = CCMenuItemImage::itemFromNormalImage(
 				"Resources/ForNum_Normal.png",
@@ -75,6 +77,13 @@ bool HelloWorld::init()
 			pNumItem->setTag(idx + 1);
 			pNumItem->setPosition(ccp(280 + idx * 48, 60));
 			vecMenuItem.push_back(pNumItem);
+
+			_snprintf(szText, sizeof(szText) - 1, "%d", idx + 1);
+			pNumLabel = CCLabelTTF::labelWithString(szText, "Thonburi", 24);
+			CC_BREAK_IF(!pNumLabel); 
+			pNumLabel->setColor(ccRED);
+			pNumLabel->setPosition(ccp(280 + idx * 48, 60));
+			this->addChild(pNumLabel, 2);
 		}
 		pNumMenu = CCMenu::menuWithItems(vecMenuItem[0], vecMenuItem[1], vecMenuItem[2], vecMenuItem[3],
 										 vecMenuItem[4], vecMenuItem[5], vecMenuItem[6], vecMenuItem[7],
@@ -82,6 +91,32 @@ bool HelloWorld::init()
 		CC_BREAK_IF(!pNumMenu);
 		pNumMenu->setPosition(CCPointZero);
 		this->addChild(pNumMenu, 1);
+
+
+
+		// 首先创建一个1x9的menu，然后再创建这样的9个menu
+		CCMenuItemLabel *pCellLabel = 0;
+		for (int i = 0; i < 9; ++i) {
+			CCMenu* pCellMenu = 0;
+			std::vector<CCMenuItemLabel*> vecCellLabel;
+			for (int j = 0; j < 9; ++j) {
+				CCLabelTTF* pNumCellLabel = CCLabelTTF::labelWithString("", "Thonburi", 48);
+				CC_BREAK_IF(!pNumCellLabel);
+				pNumCellLabel->setColor(ccMAGENTA);
+				pCellLabel = CCMenuItemLabel::itemWithLabel(pNumCellLabel, this, menu_selector(HelloWorld::menuCellCallback));
+				CC_BREAK_IF(!pCellLabel);
+				pCellLabel->setTag(j);
+				pCellLabel->setPosition(ccp(j * 57 + 28, -25));
+				vecCellLabel.push_back(pCellLabel);
+			}
+			pCellMenu = CCMenu::menuWithItems(vecCellLabel[0], vecCellLabel[1], vecCellLabel[2], vecCellLabel[3],
+				vecCellLabel[4], vecCellLabel[5], vecCellLabel[6], vecCellLabel[7],
+				vecCellLabel[8], NULL);
+			CC_BREAK_IF(!pCellMenu);
+			pCellMenu->setPosition(ccp(254, 179 + i * 58));
+			this->addChild(pCellMenu, 1, i);
+		}
+
 
         // 2. Add a label shows "Hello World".
 
@@ -137,12 +172,24 @@ void HelloWorld::menuNumCallback(CCObject* pSender)
 	switch (pNode->getTag()) {
 	case 1:
 		{
-			int a = 0;
+			CCMenu *pMenu = (CCMenu*)this->getChildByTag(0);
+			if (pMenu) {
+				CCMenuItemLabel *pCellLabel = (CCMenuItemLabel*)pMenu->getChildByTag(4);
+				if (pCellLabel) {
+					pCellLabel->setString("1");
+				}
+			}
 		}
 		break;
 	case 2:
 		{
-			int a = 0;
+			CCMenu *pMenu = (CCMenu*)this->getChildByTag(5);
+			if (pMenu) {
+				CCMenuItemLabel *pCellLabel = (CCMenuItemLabel*)pMenu->getChildByTag(7);
+				if (pCellLabel) {
+					pCellLabel->setString("2");
+				}
+			}
 		}
 		break;
 	case 3:
@@ -183,6 +230,11 @@ void HelloWorld::menuNumCallback(CCObject* pSender)
 	default:
 		break;
 	}
+}
+
+void HelloWorld::menuCellCallback(CCObject* pSender)
+{
+	int a = 0;
 }
 
 void HelloWorld::ShowMousePos(CCSet *pTouches)

@@ -1,6 +1,8 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
+#pragma warning(disable:4996)
+
 #include <sstream>
 #include "cocos2d.h"
 #include "CCTouch.h"
@@ -22,6 +24,9 @@ public:
 
 	// a selector callback
 	virtual void menuNumCallback(CCObject* pSender);
+
+	// 每个格子的回调
+	virtual void menuCellCallback(CCObject* pSender);
 
 	// default implements are used to call script callback if exist
 	virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
