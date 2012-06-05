@@ -41,6 +41,19 @@ private:
 	void ShowMousePos(cocos2d::CCSet *pTouches);
 
 private:
+	struct TMyPos
+	{
+		int x;
+		int y;
+	public:
+		TMyPos()
+		{
+			x = 0;
+			y = 0;
+		}
+	};
+
+	TMyPos m_posChoose;
 	cocos2d::CCLabelTTF* m_pLabelMousePos;
 	std::stringstream m_strstrMousePos;
 };

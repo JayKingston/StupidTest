@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 
+#define  MAKE_TAG(i, j) ((int)i << 16 | (short)j)
 using namespace cocos2d;
 
 CCScene* HelloWorld::scene()
@@ -100,12 +101,12 @@ bool HelloWorld::init()
 			CCMenu* pCellMenu = 0;
 			std::vector<CCMenuItemLabel*> vecCellLabel;
 			for (int j = 0; j < 9; ++j) {
-				CCLabelTTF* pNumCellLabel = CCLabelTTF::labelWithString("", "Thonburi", 48);
+				CCLabelTTF* pNumCellLabel = CCLabelTTF::labelWithString("   ", "Thonburi", 48);
 				CC_BREAK_IF(!pNumCellLabel);
 				pNumCellLabel->setColor(ccMAGENTA);
 				pCellLabel = CCMenuItemLabel::itemWithLabel(pNumCellLabel, this, menu_selector(HelloWorld::menuCellCallback));
 				CC_BREAK_IF(!pCellLabel);
-				pCellLabel->setTag(j);
+				pCellLabel->setTag(MAKE_TAG(i, j));
 				pCellLabel->setPosition(ccp(j * 57 + 28, -25));
 				vecCellLabel.push_back(pCellLabel);
 			}
@@ -169,72 +170,32 @@ void HelloWorld::menuNumCallback(CCObject* pSender)
 		return;
 	}
 
-	switch (pNode->getTag()) {
-	case 1:
-		{
-			CCMenu *pMenu = (CCMenu*)this->getChildByTag(0);
-			if (pMenu) {
-				CCMenuItemLabel *pCellLabel = (CCMenuItemLabel*)pMenu->getChildByTag(4);
-				if (pCellLabel) {
-					pCellLabel->setString("1");
-				}
-			}
+	std::stringstream ssNum;
+	ssNum << pNode->getTag();
+
+	CCMenu *pMenu = (CCMenu*)this->getChildByTag(m_posChoose.x);
+	if (pMenu) {
+		CCMenuItemLabel *pCellLabel = (CCMenuItemLabel*)pMenu->getChildByTag(MAKE_TAG(m_posChoose.x, m_posChoose.y));
+		if (pCellLabel) {
+			pCellLabel->setString(ssNum.str().c_str());
 		}
-		break;
-	case 2:
-		{
-			CCMenu *pMenu = (CCMenu*)this->getChildByTag(5);
-			if (pMenu) {
-				CCMenuItemLabel *pCellLabel = (CCMenuItemLabel*)pMenu->getChildByTag(7);
-				if (pCellLabel) {
-					pCellLabel->setString("2");
-				}
-			}
-		}
-		break;
-	case 3:
-		{
-			int a = 0;
-		}
-		break;
-	case 4:
-		{
-			int a = 0;
-		}
-		break;
-	case 5:
-		{
-			int a = 0;
-		}
-		break;
-	case 6:
-		{
-			int a = 0;
-		}
-		break;
-	case 7:
-		{
-			int a = 0;
-		}
-		break;
-	case 8:
-		{
-			int a = 0;
-		}
-		break;
-	case 9:
-		{
-			int a = 0;
-		}
-		break;
-	default:
-		break;
 	}
 }
 
 void HelloWorld::menuCellCallback(CCObject* pSender)
 {
-	int a = 0;
+	if (!pSender) {
+		return;
+	}
+
+	CCNode* pNode = (CCNode*)pSender;
+	if (!pNode) {
+		return;
+	}
+
+	int nTag = pNode->getTag();
+	m_posChoose.y = (int)(short)nTag;
+	m_posChoose.x = (int)(nTag >> 16);
 }
 
 void HelloWorld::ShowMousePos(CCSet *pTouches)
