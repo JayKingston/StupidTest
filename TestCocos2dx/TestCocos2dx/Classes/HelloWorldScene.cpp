@@ -1,3 +1,4 @@
+#include "LoginScene.h"
 #include "HelloWorldScene.h"
 
 #define  MAKE_TAG(i, j) ((int)i << 16 | (short)j)
@@ -53,8 +54,20 @@ bool HelloWorld::init()
         // Place the menu item bottom-right conner.
         pCloseItem->setPosition(ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20));
 
+		CCMenuItemImage *pBackItem = CCMenuItemImage::itemFromNormalImage(
+			"Resources/ForNum_Normal.png",
+			"Resources/ForNum_Select.png",
+			this,
+			menu_selector(HelloWorld::menuBackCallback));
+		CC_BREAK_IF(! pBackItem);
+		pBackItem->setPosition(ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 50));
+
+		CCLabelTTF *pBackLabel = CCLabelTTF::labelWithString("Back", "Thonburi", 24);
+		pBackLabel->setPosition(pBackItem->getPosition());
+		this->addChild(pBackLabel, 3);
+
         // Create a menu with the "close" menu item, it's an auto release object.
-        CCMenu* pMenu = CCMenu::menuWithItems(pCloseItem, NULL);
+        CCMenu* pMenu = CCMenu::menuWithItems(pCloseItem, pBackItem, NULL);
         pMenu->setPosition(CCPointZero);
         CC_BREAK_IF(! pMenu);
 
@@ -157,6 +170,12 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked
     CCDirector::sharedDirector()->end();
+}
+
+void HelloWorld::menuBackCallback(CCObject* pSender)
+{
+	// "close" menu item clicked
+	CCDirector::sharedDirector()->replaceScene(CLoginScene::scene());
 }
 
 void HelloWorld::menuNumCallback(CCObject* pSender)

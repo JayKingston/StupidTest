@@ -21,6 +21,7 @@ public:
     
     // a selector callback
     virtual void menuCloseCallback(CCObject* pSender);
+	virtual void menuBackCallback(CCObject* pSender);
 
 	// a selector callback
 	virtual void menuNumCallback(CCObject* pSender);
